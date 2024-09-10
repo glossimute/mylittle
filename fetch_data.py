@@ -45,4 +45,4 @@ def fetch_and_write_data(username, params, filename):
 for _ in range(12):
     fetch_and_write_data('1', params1, 'output_1.txt')
     fetch_and_write_data('3', params2, 'output_3.txt')
-    time.sleep(298)
+    time.sleep(300)
