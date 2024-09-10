@@ -24,11 +24,12 @@ params2 = {
 # 设置时区和时间格式
 korea_timezone = pytz.timezone('Asia/Seoul')
 
-def fetch_and_write_data(username, params, filename,formatted_time):
+def fetch_and_write_data(params, filename,formatted_time):
     try:
         response = requests.get(url, params=params)
         if response.status_code == 200:
             data = response.json().get("business_discovery")
+            username = data.get('username', "未知用户名")
             followers_count = data.get('followers_count', "未知粉丝数")
             with open(filename, 'a') as file:
                 file.write(f"{username},{followers_count},{formatted_time}\\n")
@@ -41,6 +42,6 @@ for _ in range(6):
     # 获取当前时间
     time_now = datetime.now(korea_timezone)
     formatted_time = time_now.strftime('%Y-%m-%d %H:%M:%S')
-    fetch_and_write_data('1', params1, 'output_1.txt',formatted_time)
-    fetch_and_write_data('3', params2, 'output_3.txt',formatted_time)
+    fetch_and_write_data(params1, 'output_1.txt',formatted_time)
+    fetch_and_write_data(params2, 'output_3.txt',formatted_time)
     time.sleep(300)
