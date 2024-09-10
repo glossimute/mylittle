@@ -37,7 +37,7 @@ def fetch_and_write_data(username, params, filename,formatted_time):
     except Exception as e:
         print(f"发生错误: {e}")
 
-for _ in range(2):
+for _ in range(1):
     # 获取当前时间
     time_now = datetime.now(korea_timezone)
     formatted_time = time_now.strftime('%Y-%m-%d %H:%M:%S')
