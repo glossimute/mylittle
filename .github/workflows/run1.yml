@@ -1,0 +1,71 @@
+name: Workflow 1
+on:
+  workflow_dispatch:
+
+jobs:
+  run-fetch-script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests
+        pip install pytz
+
+    - name: Run script
+      run: python fetch_data.py
+      env:
+        FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }} 
+        URL: ${{ secrets.URL }} 
+        ONE: ${{ secrets.ONE }} 
+        THREE: ${{ secrets.THREE }} 
+
+
+    - name: Add comment to Issue 1 using curl
+      run: |
+        REPO_OWNER=${{ secrets.REPO_OWNER }}
+        REPO_NAME=${{ secrets.REPO_NAME }} 
+        ISSUE_NUMBER=1
+        COMMENT_BODY=$(cat output_1.txt)
+        curl -X POST \
+            -H "Authorization: token ${{ secrets.PERSONAL_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+         https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/issues/$ISSUE_NUMBER/comments \
+          -d @- <<EOF
+        {
+          "body": "**Data from output_1.txt:**\n\`\`\`\n$COMMENT_BODY\n\`\`\`"
+        }
+        EOF
+    
+    - name: Add comment to Issue 3 using curl
+      run: |
+        REPO_OWNER=${{ secrets.REPO_OWNER }}
+        REPO_NAME=${{ secrets.REPO_NAME }} 
+        ISSUE_NUMBER=3
+        COMMENT_BODY=$(cat output_3.txt)
+        curl -X POST \
+            -H "Authorization: token ${{ secrets.PERSONAL_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+         https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/issues/$ISSUE_NUMBER/comments \
+          -d @- <<EOF
+        {
+          "body": "**Data from output_3.txt:**\n\`\`\`\n$COMMENT_BODY\n\`\`\`"
+        }
+        EOF
+    
+    - name: Trigger Workflow 2
+      run: |
+        curl -X POST \
+        -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        -H "Accept: application/vnd.github.v3+json" \
+        https://api.github.com/repos/${{ github.repository }}/actions/workflows/run2.yml/dispatches \
+        -d '{"ref":"main"}'
