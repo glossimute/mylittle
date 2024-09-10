@@ -37,10 +37,10 @@ def fetch_and_write_data(username, params, filename,formatted_time):
     except Exception as e:
         print(f"发生错误: {e}")
 
-for _ in range(1):
+for _ in range(6):
     # 获取当前时间
     time_now = datetime.now(korea_timezone)
     formatted_time = time_now.strftime('%Y-%m-%d %H:%M:%S')
     fetch_and_write_data('1', params1, 'output_1.txt',formatted_time)
     fetch_and_write_data('3', params2, 'output_3.txt',formatted_time)
-    time.sleep(60)
+    time.sleep(300)
