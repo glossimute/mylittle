@@ -24,12 +24,7 @@ params2 = {
 # 设置时区和时间格式
 korea_timezone = pytz.timezone('Asia/Seoul')
 
-def fetch_and_write_data(username, params, filename):
-    # 获取当前时间
-    time_now = datetime.now(korea_timezone)
-    formatted_time = time_now.strftime('%Y-%m-%d %H:%M:%S')
-
-    # 发送请求并处理响应
+def fetch_and_write_data(username, params, filename,formatted_time):
     try:
         response = requests.get(url, params=params)
         if response.status_code == 200:
@@ -42,7 +37,10 @@ def fetch_and_write_data(username, params, filename):
     except Exception as e:
         print(f"发生错误: {e}")
 
-for _ in range(12):
-    fetch_and_write_data('1', params1, 'output_1.txt')
-    fetch_and_write_data('3', params2, 'output_3.txt')
-    time.sleep(300)
+for _ in range(2):
+    # 获取当前时间
+    time_now = datetime.now(korea_timezone)
+    formatted_time = time_now.strftime('%Y-%m-%d %H:%M:%S')
+    fetch_and_write_data('1', params1, 'output_1.txt',formatted_time)
+    fetch_and_write_data('3', params2, 'output_3.txt',formatted_time)
+    time.sleep(60)
