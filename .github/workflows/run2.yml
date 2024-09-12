@@ -29,37 +29,14 @@ jobs:
         ONE: ${{ secrets.ONE }} 
         THREE: ${{ secrets.THREE }} 
 
-    - name: Add comment to Issue 1 using curl
-      run: |
-        REPO_OWNER=${{ secrets.REPO_OWNER }}
-        REPO_NAME=${{ secrets.REPO_NAME }} 
-        ISSUE_NUMBER=1
-        COMMENT_BODY=$(cat output_1.txt)
-        curl -X POST \
-            -H "Authorization: token ${{ secrets.PERSONAL_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-         https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/issues/$ISSUE_NUMBER/comments \
-          -d @- <<EOF
-        {
-          "body": "**Data from output_1.txt:**\n\`\`\`\n$COMMENT_BODY\n\`\`\`"
-        }
-        EOF
-
-    - name: Add comment to Issue 3 using curl
-      run: |
-        REPO_OWNER=${{ secrets.REPO_OWNER }}
-        REPO_NAME=${{ secrets.REPO_NAME }} 
-        ISSUE_NUMBER=3
-        COMMENT_BODY=$(cat output_3.txt)
-        curl -X POST \
-            -H "Authorization: token ${{ secrets.PERSONAL_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-         https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/issues/$ISSUE_NUMBER/comments \
-          -d @- <<EOF
-        {
-          "body": "**Data from output_3.txt:**\n\`\`\`\n$COMMENT_BODY\n\`\`\`"
-        }
-        EOF
+    - name: Send data
+      run: python send.py
+      env:
+        EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+        EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
+        EMAIL_USER: ${{ secrets.EMAIL_USER }}
+        EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+        EMAIL_RECEIVER: ${{ secrets.EMAIL_RECEIVER }}  
 
     - name: Trigger Workflow 1
       run: |
