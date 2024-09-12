@@ -34,7 +34,7 @@ def fetch_and_write_data(params, filename):
             time_now = datetime.now(korea_timezone)
             formatted_time = time_now.strftime('%Y-%m-%d %H:%M:%S')
             with open(filename, 'a') as file:
-                file.write(f"{username},{followers_count},{formatted_time}\\n")
+                file.write(f"{username},{followers_count},{formatted_time}\n")
         else:
             print(f"请求失败，状态码: {response.status_code}")
     except Exception as e:
