@@ -11,6 +11,7 @@ body = "Data from output_1.txt:\n" + open("output_1.txt").read() + "\n" + "Data 
 message = MIMEMultipart()
 message["From"] = sender_email
 message["To"] = receiver_email
+message["Cc"] = sender_email
 message["Subject"] = subject
 message.attach(MIMEText(body, "plain"))
 
